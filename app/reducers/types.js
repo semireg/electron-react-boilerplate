@@ -1,14 +1,20 @@
 import type { Dispatch as ReduxDispatch, Store as ReduxStore } from 'redux';
 
-export type counterStateType = {
-  +counter: number
+export type appStateType = {
+  +counter: number,
+  +tmpFile: string
 };
 
 export type Action = {
   +type: string
 };
 
-export type GetState = () => counterStateType;
+export type PathAction = Action & {
+  +type: string,
+  +path: string
+};
+
+export type GetState = () => appStateType;
 
 export type Dispatch = ReduxDispatch<Action>;
 

@@ -7,7 +7,11 @@ import webpack from 'webpack';
 import { dependencies } from '../package.json';
 
 export default {
-  externals: [...Object.keys(dependencies || {})],
+  externals: [
+    'opencv4nodejs',
+    'opencv-build',
+    ...Object.keys(dependencies || {})
+  ],
 
   module: {
     rules: [

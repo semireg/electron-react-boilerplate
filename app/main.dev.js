@@ -14,10 +14,14 @@ import { app, BrowserWindow } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
+import DetectFaces from './opencv/face';
+
+const { ipcMain: ipc } = require('electron-better-ipc');
 
 export default class AppUpdater {
   constructor() {
-    log.transports.file.level = 'info';
+    log.transports.file.level = 'silly';
+    log.transports.console.level = 'silly';
     autoUpdater.logger = log;
     autoUpdater.checkForUpdatesAndNotify();
   }
@@ -44,7 +48,7 @@ const installExtensions = async () => {
 
   return Promise.all(
     extensions.map(name => installer.default(installer[name], forceDownload))
-  ).catch(console.log);
+  ).catch(log.info);
 };
 
 /**
@@ -87,6 +91,16 @@ app.on('ready', async () => {
       mainWindow.show();
       mainWindow.focus();
     }
+
+    log.info('did-finish-load');
+    log.info('about to start DetectFaces');
+    const doInMain = true;
+    if (doInMain) {
+      DetectFaces().then(tmpFile => {
+        log.info('finished DetectFaces');
+        ipc.callRenderer(mainWindow, 'tmpFile', tmpFile);
+      });
+    }
   });
 
   mainWindow.on('closed', () => {
@@ -98,5 +112,4 @@ app.on('ready', async () => {
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
-  new AppUpdater();
 });

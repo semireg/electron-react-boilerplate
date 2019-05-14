@@ -1,7 +1,7 @@
 {
   "name": "electron-react-boilerplate",
-  "productName": "ElectronReact",
-  "version": "0.17.1",
+  "productName": "OpenCVExample",
+  "version": "0.1.0",
   "description": "Electron application boilerplate based on React, React Router, Webpack, React Hot Loader for rapid application development",
   "scripts": {
     "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",
@@ -56,8 +56,10 @@
   },
   "main": "./app/main.prod.js",
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.develar.ElectronReact",
+    "productName": "OpenCVExample",
+    "appId": "com.semireg.OpenCVExample",
+    "nodeGypRebuild": false,
+    "npmRebuild": false,
     "files": [
       "app/dist/",
       "app/app.html",
@@ -65,6 +67,21 @@
       "app/main.prod.js.map",
       "package.json"
     ],
+    "asarUnpack": [
+      "node_modules/opencv4nodejs"
+    ],
+    "asar": false,
+    "extraResources": [
+      {
+        "from": "app/opencv/data",
+        "to": "opencv/"
+      }
+    ],
+    "mac": {
+      "target": [
+        "zip"
+      ]
+    },
     "dmg": {
       "contents": [
         {
@@ -257,12 +274,15 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.8.1",
     "connected-react-router": "^6.3.2",
-    "core-js": "2",
+    "core-js": "^2.6.5",
     "devtron": "^1.4.0",
+    "electron-better-ipc": "^0.3.0",
     "electron-debug": "^2.1.0",
-    "electron-log": "^3.0.4",
+    "electron-is": "^3.0.0",
+    "electron-log": "^3.0.5",
     "electron-updater": "^4.0.6",
     "history": "^4.9.0",
+    "opencv4nodejs": "^4.16.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-hot-loader": "^4.8.2",

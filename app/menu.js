@@ -1,5 +1,19 @@
 // @flow
 import { app, Menu, shell, BrowserWindow } from 'electron';
+import ipc from 'electron-better-ipc';
+import is from 'electron-is';
+import log from 'electron-log';
+import path from 'path';
+
+const openLogsDir = () => {
+  const logPath = log.transports.file.findLogPath();
+  if (logPath == null) {
+    return;
+  }
+  const logDir = path.dirname(logPath);
+  log.info(`logDir: ${logDir}`);
+  shell.openExternal(`file://${logDir}`);
+};
 
 export default class MenuBuilder {
   mainWindow: BrowserWindow;
@@ -45,17 +59,21 @@ export default class MenuBuilder {
 
   buildDarwinTemplate() {
     const subMenuAbout = {
-      label: 'Electron',
+      label: 'OpenCVExample',
       submenu: [
         {
-          label: 'About ElectronReact',
+          label: 'About OpenCVExample',
           selector: 'orderFrontStandardAboutPanel:'
+        },
+        {
+          label: 'Show Logs',
+          click: openLogsDir
         },
         { type: 'separator' },
         { label: 'Services', submenu: [] },
         { type: 'separator' },
         {
-          label: 'Hide ElectronReact',
+          label: 'Hide OpenCVExample',
           accelerator: 'Command+H',
           selector: 'hide:'
         },
